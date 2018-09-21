@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">TP3</string>
+    <string name="AddStudentButton">Ajouter un étudiant</string>
+    <string name="ListStudentButton">Lister les étudiants</string>
+    <string name="nom">Nom :</string>
+    <string name="pr_nom">Prénom :</string>
+    <string name="sexe">Sexe :</string>
+    <string name="homme">Homme</string>
+    <string name="femme">Femme</string>
+    <string name="email">Email :</string>
+    <string name="date_de_naissance">Date de naissance :</string>
+    <string name="groupe">Groupe :</string>
+    <string name="redoublant">Redoublant :</string>
+    <string name="ajouter">Ajouter</string>
+    <string name="chooseADate">Choisir une date</string>
+
+    <string-array name="ListGroup">
+        <item>SSINC</item>
+        <item>SSID</item>
+    </string-array>
+</resources>
