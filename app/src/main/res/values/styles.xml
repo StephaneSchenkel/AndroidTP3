@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:actionMenuTextColor">@color/textColorItem</item>
     </style>
 
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
@@ -21,11 +22,13 @@
         <item name="colorControlNormal">@color/colorPrimary</item>
         <item name="colorControlHighlight">@color/colorPrimaryDark</item>
         <item name="android:textColor">#fff</item>
+        <item name="android:actionMenuTextColor">@color/textColorItem</item>
     </style>
 
     <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light" >
         <item name="android:background">@android:color/white</item>
         <item name="android:textColor">#fff</item>
+        <item name="android:actionMenuTextColor">@color/textColorItem</item>
     </style>
 
 </resources>

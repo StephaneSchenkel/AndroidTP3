@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Préférences">
+        <ListPreference
+            android:key="affichage"
+            android:title="@string/modeaffichage"
+            android:summary="Ordre d'affichage du nom et du prénom des étudiants dans la liste"
+            android:entries="@array/OrdreAffichage"
+            android:entryValues="@array/OrdreAffichageValues"
+            android:dialogTitle="@string/modeaffichage"
+            />
+    </PreferenceCategory>
+</PreferenceScreen>

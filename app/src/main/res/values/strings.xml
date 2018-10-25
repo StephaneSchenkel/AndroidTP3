@@ -13,9 +13,18 @@
     <string name="redoublant">Redoublant :</string>
     <string name="ajouter">Ajouter</string>
     <string name="chooseADate">Choisir une date</string>
+    <string name="modeaffichage">Mode d\'affichage des étudiants dans la liste</string>
 
     <string-array name="ListGroup">
         <item>SSINC</item>
         <item>SSID</item>
+    </string-array>
+    <string-array name="OrdreAffichage">
+        <item>Nom Prénom</item>
+        <item>Prénom Nom</item>
+    </string-array>
+    <string-array name="OrdreAffichageValues">
+        <item>np</item>
+        <item>pn</item>
     </string-array>
 </resources>

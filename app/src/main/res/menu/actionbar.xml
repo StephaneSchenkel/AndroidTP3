@@ -10,4 +10,9 @@
         android:icon="@android:drawable/ic_menu_delete"
         android:title="Delete"
         actionbarcompat_mse:showAsAction="always"></item>
+
+    <item android:id="@+id/action_settings"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="Settings"
+        actionbarcompat_mse:showAsAction="ifRoom"></item>
 </menu>

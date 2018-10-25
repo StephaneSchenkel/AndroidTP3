@@ -2,6 +2,11 @@ package test.test.tp3;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,20 +18,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+import test.test.tp3.db.StudentHelper;
+import test.test.tp3.db.StudentReaderContract;
+
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private ListStudentFragment listStudentFragment;
 
-    static List<Student> List;
+    static List<Student> List = new ArrayList<>();
     static Student SelectedStudent;
-    static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+    public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
     private static final int ADD_STUDENT = 1;
 
+    private StudentHelper helper;
 
     private Toolbar mTopToolbar;
 
@@ -35,7 +45,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listStudentFragment = new ListStudentFragment();
+        helper = new StudentHelper(getApplicationContext());
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        try {
+            InitializeHelper();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String value = prefs.getString("affichage", "np");
+        prefs.registerOnSharedPreferenceChangeListener(this);
+
+        listStudentFragment = ListStudentFragment.newInstance(helper, value);
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -68,13 +91,13 @@ public class MainActivity extends AppCompatActivity {
                 else
                     Toast.makeText(MainActivity.this, "Select a student before clicking on delete", Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.action_settings:
+                Intent intentpreference = new Intent(MainActivity.this, Preferences.class);
+                startActivity(intentpreference);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void InitializeList(){
-        listStudentFragment.AddStudent(new Student("SCHENKEL", "Stéphane", "Homme", "schenkel.stephane@gmail.com", new Date(), "SSINC", false));
     }
 
     @Override
@@ -88,5 +111,25 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    private void InitializeHelper() throws ParseException {
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + StudentReaderContract.StudentEntry.TABLE_NAME, null);
+        if(cursor.moveToFirst()){
+            List.add(Student.GetFromCursor(cursor));
+            while(cursor.moveToNext()){
+                List.add(Student.GetFromCursor(cursor));
+            }
+        }
+        cursor.close();
+        db.close();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        String value = sharedPreferences.getString("affichage", "np");
+        listStudentFragment.UpdatePref(value);
     }
 }

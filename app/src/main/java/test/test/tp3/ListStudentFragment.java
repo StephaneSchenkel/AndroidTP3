@@ -1,6 +1,8 @@
 package test.test.tp3;
 
+import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,10 +21,24 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import test.test.tp3.db.StudentHelper;
+import test.test.tp3.db.StudentReaderContract;
+
 public class ListStudentFragment extends Fragment {
 
     private ListStudentAdapter adapter;
     private ListView listView;
+    private StudentHelper helper;
+
+    public static ListStudentFragment newInstance(StudentHelper helper, String affichage) {
+        ListStudentFragment f = new ListStudentFragment();
+        // Supply index input as an argument.
+        Bundle args = new Bundle();
+        args.putSerializable("Helper", helper);
+        args.putString("Affichage", affichage);
+        f.setArguments(args);
+        return f;
+    }
 
     @Nullable
     @Override
@@ -30,7 +46,11 @@ public class ListStudentFragment extends Fragment {
         if(MainActivity.List == null)
             MainActivity.List = new ArrayList<>();
 
-        adapter = new ListStudentAdapter(inflater.getContext(), R.layout.list_student_row, MainActivity.List);
+        Bundle args = getArguments();
+        helper = (StudentHelper)args.getSerializable("Helper");
+        String affichage = args.getString("Affichage");
+
+        adapter = new ListStudentAdapter(inflater.getContext(), R.layout.list_student_row, MainActivity.List, affichage);
 
         View view = inflater.inflate(R.layout.list_student, container, false);
 
@@ -65,6 +85,8 @@ public class ListStudentFragment extends Fragment {
 
         MainActivity.List.add(student);
 
+        helper.AddStudent(student);
+
         if(adapter != null)
             adapter.notifyDataSetChanged();
     }
@@ -78,6 +100,7 @@ public class ListStudentFragment extends Fragment {
                 {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        helper.DeleteStudent(MainActivity.SelectedStudent);
                         MainActivity.List.remove(MainActivity.SelectedStudent);
                         MainActivity.SelectedStudent = null;
 
@@ -90,5 +113,10 @@ public class ListStudentFragment extends Fragment {
                 })
                 .setNegativeButton("Non", null)
                 .show();
+    }
+
+    public void UpdatePref(String pref){
+        adapter.setTypeAffichage(pref);
+        adapter.notifyDataSetChanged();
     }
 }
